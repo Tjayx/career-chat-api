@@ -4,7 +4,7 @@ from typing import Any
 from jose import JWTError, jwt
 from pwdlib import PasswordHash
 
-from app.core.config import settings
+from core.config import settings
 
 password_hash = PasswordHash.recommended()
 

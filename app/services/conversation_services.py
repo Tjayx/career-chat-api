@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from app.models.conversation import Conversation
-from app.repositories.conversation_repository import ConversationRepository
+from models.conversation import Conversation
+from repositories.conversation_repository import ConversationRepository
 
 
 class ConversationService:

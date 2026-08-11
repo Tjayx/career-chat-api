@@ -1,8 +1,8 @@
 from uuid import UUID
 
-from app.models.message import Message, MessageRole
-from app.repositories.message_repository import MessageRepository
-from app.services.conversation_services import ConversationService
+from models.message import Message, MessageRole
+from repositories.message_repository import MessageRepository
+from services.conversation_services import ConversationService
 
 
 class MessageService:

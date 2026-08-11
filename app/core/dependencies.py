@@ -1,19 +1,22 @@
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.session import get_db
-from app.repositories.user_repository import UserRepository
-from app.services.auth_services import AuthService
+from database.session import get_db
+from repositories.user_repository import UserRepository
+from services.auth_services import AuthService
 
-from app.core.security import decode_access_token, InvalidTokenError
-from app.repositories.conversation_repository import ConversationRepository
-from app.services.conversation_services import ConversationService
+from core.security import decode_access_token, InvalidTokenError
+from repositories.conversation_repository import ConversationRepository
+from services.conversation_services import ConversationService
+from repositories.message_repository import MessageRepository
+from services.chat_services import ChatService
 
-from app.models.user import User
+from models.user import User
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+http_bearer = HTTPBearer()
 
 
 def get_user_repository(
@@ -36,11 +39,11 @@ def get_conversation_service(
     return ConversationService(repository)
 
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
+    credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
     repository: UserRepository = Depends(get_user_repository),
 ) -> User:
     try:
-        payload = decode_access_token(token)
+        payload = decode_access_token(credentials.credentials)
     except InvalidTokenError:
         raise HTTPException(
             status_code=401,
@@ -64,3 +67,15 @@ async def get_current_user(
         )
 
     return user
+
+async def get_chat_service(
+    conversation_service: ConversationService = Depends(get_conversation_service),
+    db: AsyncSession = Depends(get_db),
+    ai_client = Depends(lambda: None),  # Replace with actual AI client dependency
+) -> "ChatService":
+    message_repository = MessageRepository(db)
+    return ChatService(
+        conversation_service=conversation_service,
+        message_repository=message_repository,
+        ai_client=ai_client,
+    )

@@ -1,7 +1,8 @@
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from uuid import UUID
 
 class UserResponse(BaseModel):
-    id: int
+    id: UUID
     name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
     personal_interests: list[str]

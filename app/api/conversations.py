@@ -2,18 +2,18 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.core.dependencies import (
+from core.dependencies import (
     get_conversation_service,
     get_current_user,
 )
-from app.models.user import User
-from app.schemas.conversation import (
+from models.user import User
+from schemas.conversation import (
     ConversationListResponse,
     ConversationResponse,
     CreateConversationRequest,
     UpdateConversationRequest,
 )
-from app.services.conversation_services import ConversationService
+from services.conversation_services import ConversationService
 
 router = APIRouter(
     prefix="/conversations",

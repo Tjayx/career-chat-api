@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.core.dependencies import get_auth_service
-from app.schemas.auth import (
+from core.dependencies import get_auth_service
+from schemas.auth import (
     LoginRequest,
     RegisterRequest,
     TokenResponse,
 )
-from app.schemas.user import UserResponse
-from app.services.auth_services import AuthService
+from schemas.user import UserResponse
+from services.auth_services import AuthService
 
 router = APIRouter(
     prefix="/auth",

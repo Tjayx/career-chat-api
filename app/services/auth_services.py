@@ -1,14 +1,14 @@
 from uuid import UUID
 
-from app.core.security import (
+from core.security import (
     create_access_token,
     hash_password,
     verify_password,
 )
-from app.repositories.user_repository import UserRepository
-from app.schemas.auth import LoginRequest, RegisterRequest
-from app.schemas.auth import TokenResponse
-from app.models.user import User
+from repositories.user_repository import UserRepository
+from schemas.auth import LoginRequest, RegisterRequest
+from schemas.auth import TokenResponse
+from models.user import User
 
 
 class AuthService:
