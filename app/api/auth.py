@@ -38,6 +38,7 @@ async def register(
     "/login",
     response_model=TokenResponse,
 )
+@limiter.limit("5/minute")
 async def login(
     request: LoginRequest,
     auth_service: AuthService = Depends(get_auth_service),

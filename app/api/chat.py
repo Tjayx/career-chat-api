@@ -23,6 +23,7 @@ router = APIRouter(
     "/{conversation_id}",
     response_model=ChatResponse,
 )
+@limiter.limit("10/minute")
 async def chat(
     conversation_id: UUID,
     request: ChatRequest,
