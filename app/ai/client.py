@@ -1,8 +1,12 @@
-from typing import Any
+from typing import Any, TypeVar
+from pydantic import BaseModel
 
 from openai import AsyncOpenAI
 
 from core.config import settings
+
+
+T = TypeVar("T", bound=BaseModel)
 
 
 class AIClient:
@@ -36,3 +40,23 @@ class AIClient:
             )
 
         return content
+
+    async def extract_profile(
+        self,
+        *,
+        prompt: str,
+        response_model: type[T],
+    ) -> T:
+
+        response = await self.client.responses.parse(
+            model=self.model,
+            input=prompt,
+            text_format=response_model,
+        )
+
+        if response.output_parsed is None:
+            raise RuntimeError(
+                "AI failed to extract user profile information."
+            )
+
+        return response.output_parsed
